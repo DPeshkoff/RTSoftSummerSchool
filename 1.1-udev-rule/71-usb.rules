@@ -1,0 +1,2 @@
+# match serial with neccessary
+ACTION=="add", ATTRS{serial}=="M2YGSJ81", RUN+="/usr/bin/copy-logs.sh"
