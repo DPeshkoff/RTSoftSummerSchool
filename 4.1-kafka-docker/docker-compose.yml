@@ -1,0 +1,39 @@
+version: "3"
+
+services:
+  
+    broker:
+  
+      build: broker/
+  
+      command: /kafka/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic TutorialTopic
+  
+      ports:
+        - 2181:2181
+        - 9092:9092
+
+      environment:
+        KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+  
+    producer:
+  
+      build: producer/
+   
+      command: echo "Hello, World" | ~/kafka/bin/kafka-console-producer.sh --broker-list localhost:9092 --topic TutorialTopic > /dev/null
+  
+      network_mode: host
+   
+      depends_on:
+        - broker
+
+    consumer:
+  
+      build: consumer/
+         
+      command: /kafka/bin/kafka-console-consumer.sh --topic TutorialTopic --bootstrap-server broker:9092,producer:9092  --from-beginning
+        
+      network_mode: host
+         
+      depends_on:
+        - broker
+        - producer
