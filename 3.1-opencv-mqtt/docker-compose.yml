@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  
+    broker:
+  
+      build: mqtt/
+  
+      command: mosquitto_sub -h localhost -t opencv
+  
+      ports:
+        - 1883:1883
+  
+    opencv:
+  
+      build: opencv/
+   
+      #command: 
+  
+      network_mode: host
+   
+      depends_on:
+        - broker
